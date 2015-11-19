@@ -28,9 +28,19 @@ public class SpawnerScript : MonoBehaviour {
 	private float speed = 30f;	
 
 	private AudioSource tone;
+	private float octaves = 1f;
 
 	private Vector3 lastPos;
 
+	private float cBound0;
+	private float cBound1;
+	private float cBound2;
+	private float cBound3;
+	private float cBound4;
+	private float cBound5;
+	private float cBound6;
+
+	private float cInterval;
 
 	// Use this for initialization
 	void Start () {
@@ -43,6 +53,14 @@ public class SpawnerScript : MonoBehaviour {
 		botLeft = botRow.transform.position - botRow.transform.lossyScale.x * botRow.transform.right * 1f/2f;
 		botSpan = Vector3.Distance (botLeft, botLeft + botRow.transform.lossyScale.x * botRow.transform.right);
 
+		cInterval = topSpan / 6f;
+		cBound0 = topLeft.x;
+		cBound1 = topLeft.x + cInterval;
+		cBound2 = topLeft.x + 2f * cInterval;
+		cBound3 = topLeft.x + 3f * cInterval;
+		cBound4 = topLeft.x + 4f * cInterval;
+		cBound5 = topLeft.x + 5f * cInterval;
+		cBound6 = topLeft.x + 6f * cInterval;
 
 		tone = GetComponent<AudioSource> ();
 	}
@@ -136,7 +154,7 @@ public class SpawnerScript : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown (KeyCode.Space)) {
-			shootChar (" ", botLeft + (botSpan * Vector3.right * 1f/2f) + Vector3.back * 5f);
+			shootChar (" ", botLeft + (botSpan * Vector3.right * 1f/2f) + Vector3.back * 5f + Vector3.down * 5f);
 		}
 
 		if (Input.GetKeyDown (KeyCode.Escape)) {
@@ -145,7 +163,7 @@ public class SpawnerScript : MonoBehaviour {
 	}
 
 	void shootChar(string id, Vector3 pos) {
-		if (Time.time - lastShotTime < 0.1) {
+		if (Time.time - lastShotTime < 0.255f) {
 			//return;
 		}
 		Rigidbody blockClone;
@@ -158,11 +176,27 @@ public class SpawnerScript : MonoBehaviour {
 			blockClone.rotation = Random.rotation;
 		}
 
-		tone.pitch = (Mathf.Abs(topLeft.x - lastPos.x) / topSpan * 2f) + 2f;
-		tone.Play();
+		//tone.pitch = (Mathf.Abs(topLeft.x - lastPos.x) / topSpan * 3f) + 1f;
+
+
+		float r = Mathf.Abs (topLeft.x - lastPos.x) / topSpan;
+		float aPitch = Mathf.Pow (2f, r * octaves + 1);
+		tone.pitch = aPitch;
+		//Debug.Log (Mathf.Abs (lastPos.x - topLeft.x));
+		//if(!tone.isPlaying) {
+		//	tone.Play();
+		//}
+		if (tone.isPlaying) {
+			tone.Stop();
+		}
+		tone.Play ();
+
 
 		//GameObject blockCloneGO = (GameObject)(blockClone);
-		Color ech = new Color (Random.value, Random.value, Random.value);
+		Color ech = computeColor (lastPos.x);
+
+
+
 		blockClone.GetComponent<Renderer> ().materials [0].color = ech;
 
 		blockClone.angularVelocity = new Vector3 (Random.value * 5f - 2.5f, Random.value * 5f - 2.5f, Random.value * 5f - 2.5f);
@@ -171,5 +205,49 @@ public class SpawnerScript : MonoBehaviour {
 		//blockClone.velocity = new Vector3 (0f, speed, 0f);
 		lastShotTime = Time.time;
 
+	}
+
+	Color computeColor (float xVal) {
+		float r;
+		float g;
+		float b;
+
+		if (cBound0 <= xVal && xVal < cBound1) {
+			r = 1f;
+			g = (xVal - cBound0) / (cBound1 - cBound0);
+			b = 0f;
+		}
+		else if (cBound1 <= xVal && xVal < cBound2) {
+			r = 1f - (xVal - cBound1) / (cBound2 - cBound1);
+			g = 1f;
+			b = 0f;
+		}
+		else if (cBound2 <= xVal && xVal < cBound3) {
+			r = 0f;
+			g = 1f;
+			b = (xVal - cBound2) / (cBound3 - cBound2);
+		}
+		else if (cBound3 <= xVal && xVal < cBound4) {
+			r = 0f;
+			g = 1f - (xVal - cBound3) / (cBound4 - cBound3);
+			b = 1f;
+		}
+		else if (cBound4 <= xVal && xVal < cBound5) {
+			r = (xVal - cBound4) / (cBound5 - cBound4);
+			g = 0f;
+			b = 1f;
+		}
+		else if (cBound5 <= xVal && xVal < cBound6) {
+			r = 1f;
+			g = 0;
+			b = 1f - (xVal - cBound5) / (cBound6 - cBound5);
+		}
+		else {
+			r = 1f;
+			g = 0f;
+			b = 0f;
+		}
+		return new Color(r, g, b);
+		
 	}
 }
