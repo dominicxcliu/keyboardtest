@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
 
 public class SpawnerScript : MonoBehaviour {
 	
@@ -25,7 +27,7 @@ public class SpawnerScript : MonoBehaviour {
 	private float midCount = 8f;
 	private float botCount = 6f;
 
-	private float speed = 30f;	
+	private float speed = 50f;	
 
 	private AudioSource tone;
 	private float octaves = 1f;
@@ -41,6 +43,8 @@ public class SpawnerScript : MonoBehaviour {
 	private float cBound6;
 
 	private float cInterval;
+
+	public Texture[] textures;
 
 	// Use this for initialization
 	void Start () {
@@ -69,106 +73,119 @@ public class SpawnerScript : MonoBehaviour {
 	void Update () {
 	
 		if (Input.GetKeyDown (KeyCode.Q)) {
-			shootChar ("q", topLeft);
+			shootChar (0, topLeft);
 		}
 		if (Input.GetKeyDown (KeyCode.W)) {
-			shootChar ("w", topLeft + (topSpan * Vector3.right * 1f/topCount));
+			shootChar (1, topLeft + (topSpan * transform.right * 1f / topCount));
 		}
 		if (Input.GetKeyDown (KeyCode.E)) {
-			shootChar ("e", topLeft + (topSpan * Vector3.right * 2f/topCount));
+			shootChar (2, topLeft + (topSpan * transform.right * 2f / topCount));
 		}
 		if (Input.GetKeyDown (KeyCode.R)) {
-			shootChar ("r", topLeft + (topSpan * Vector3.right * 3f/topCount));
+			shootChar (3, topLeft + (topSpan * transform.right * 3f / topCount));
 		}
 		if (Input.GetKeyDown (KeyCode.T)) {
-			shootChar ("t", topLeft + (topSpan * Vector3.right * 4f/topCount));
+			shootChar (4, topLeft + (topSpan * transform.right * 4f / topCount));
 		}
 		if (Input.GetKeyDown (KeyCode.Y)) {
-			shootChar ("y", topLeft + (topSpan * Vector3.right * 5f/topCount));
+			shootChar (5, topLeft + (topSpan * transform.right * 5f / topCount));
 		}
 		if (Input.GetKeyDown (KeyCode.U)) {
-			shootChar ("u", topLeft + (topSpan * Vector3.right * 6f/topCount));
+			shootChar (6, topLeft + (topSpan * transform.right * 6f / topCount));
 		}
 		if (Input.GetKeyDown (KeyCode.I)) {
-			shootChar ("i", topLeft + (topSpan * Vector3.right * 7f/topCount));
+			shootChar (7, topLeft + (topSpan * transform.right * 7f / topCount));
 		}
 		if (Input.GetKeyDown (KeyCode.O)) {
-			shootChar ("o", topLeft + (topSpan * Vector3.right * 8f/topCount));
+			shootChar (8, topLeft + (topSpan * transform.right * 8f / topCount));
 		}
 		if (Input.GetKeyDown (KeyCode.P)) {
-			shootChar ("p", topLeft + (topSpan * Vector3.right * 9f/topCount));
+			shootChar (9, topLeft + (topSpan * transform.right * 9f / topCount));
 		}
 
 
 		if (Input.GetKeyDown (KeyCode.A)) {
-			shootChar ("a", midLeft);
+			shootChar (10, midLeft);
 		}
 		if (Input.GetKeyDown (KeyCode.S)) {
-			shootChar ("s", midLeft + (midSpan * Vector3.right * 1f/midCount));
+			shootChar (11, midLeft + (midSpan * transform.right * 1f / midCount));
 		}
 		if (Input.GetKeyDown (KeyCode.D)) {
-			shootChar ("d", midLeft + (midSpan * Vector3.right * 2f/midCount));
+			shootChar (12, midLeft + (midSpan * transform.right * 2f / midCount));
 		}
 		if (Input.GetKeyDown (KeyCode.F)) {
-			shootChar ("f", midLeft + (midSpan * Vector3.right * 3f/midCount));
+			shootChar (13, midLeft + (midSpan * transform.right * 3f / midCount));
 		}
 		if (Input.GetKeyDown (KeyCode.G)) {
-			shootChar ("g", midLeft + (midSpan * Vector3.right * 4f/midCount));
+			shootChar (14, midLeft + (midSpan * transform.right * 4f / midCount));
 		}
 		if (Input.GetKeyDown (KeyCode.H)) {
-			shootChar ("h", midLeft + (midSpan * Vector3.right * 5f/midCount));
+			shootChar (15, midLeft + (midSpan * transform.right * 5f / midCount));
 		}
 		if (Input.GetKeyDown (KeyCode.J)) {
-			shootChar ("j", midLeft + (midSpan * Vector3.right * 6f/midCount));
+			shootChar (16, midLeft + (midSpan * transform.right * 6f / midCount));
 		}
 		if (Input.GetKeyDown (KeyCode.K)) {
-			shootChar ("k", midLeft + (midSpan * Vector3.right * 7f/midCount));
+			shootChar (17, midLeft + (midSpan * transform.right * 7f / midCount));
 		}
 		if (Input.GetKeyDown (KeyCode.L)) {
-			shootChar ("l", midLeft + (midSpan * Vector3.right * 8f/midCount));
+			shootChar (18, midLeft + (midSpan * transform.right * 8f / midCount));
 		}
 
 
 
 
 		if (Input.GetKeyDown (KeyCode.Z)) {
-			shootChar ("z", botLeft);
+			shootChar (19, botLeft);
 		}
 		if (Input.GetKeyDown (KeyCode.X)) {
-			shootChar ("x", botLeft + (botSpan * Vector3.right * 1f/botCount));
+			shootChar (20, botLeft + (botSpan * transform.right * 1f / botCount));
 		}
 		if (Input.GetKeyDown (KeyCode.C)) {
-			shootChar ("c", botLeft + (botSpan * Vector3.right * 2f/botCount));
+			shootChar (21, botLeft + (botSpan * transform.right * 2f / botCount));
 		}
 		if (Input.GetKeyDown (KeyCode.V)) {
-			shootChar ("v", botLeft + (botSpan * Vector3.right * 3f/botCount));
+			shootChar (22, botLeft + (botSpan * transform.right * 3f / botCount));
 		}
 		if (Input.GetKeyDown (KeyCode.B)) {
-			shootChar ("b", botLeft + (botSpan * Vector3.right * 4f/botCount));
+			shootChar (23, botLeft + (botSpan * transform.right * 4f / botCount));
 		}
 		if (Input.GetKeyDown (KeyCode.N)) {
-			shootChar ("n", botLeft + (botSpan * Vector3.right * 5f/botCount));
+			shootChar (24, botLeft + (botSpan * transform.right * 5f / botCount));
 		}
 		if (Input.GetKeyDown (KeyCode.M)) {
-			shootChar ("m", botLeft + (botSpan * Vector3.right * 6f/botCount));
+			shootChar (25, botLeft + (botSpan * transform.right * 6f / botCount));
 		}
 
 		if (Input.GetKeyDown (KeyCode.Space)) {
-			shootChar (" ", botLeft + (botSpan * Vector3.right * 1f/2f) + Vector3.back * 5f + Vector3.down * 5f);
+			shootChar (26, botLeft + (botSpan * transform.right * 1f / 2f) + Vector3.back * 5f + Vector3.down * 5f);
 		}
 
 		if (Input.GetKeyDown (KeyCode.Escape)) {
 			Application.Quit ();
 		}
+
+		if (Input.GetKeyDown (KeyCode.Return)) {
+			//SpeechSynthesizer sp = new 
+			//Requester.getMp3 ("http://translate.google.com/translate_tts?tl=en&q=hello&ie=UTF-8&total=1&idx=0&client=t");
+			//Requester.getMp3 ("http://translate.google.com/translate_tts?tl=en&q=Hello%20World&client=t");
+			//Requester.getMp3 ();
+			Application.OpenURL("http://translate.google.com/translate_tts?ie=UTF-8&q=Hello&tl=en&client=t");
+			Application.OpenURL("https://www.google.com/?gws_rd=ssl");
+		}
+
+		if (Input.GetKeyDown (KeyCode.Escape)) {
+			Application.Quit();
+		}
 	}
 
-	void shootChar(string id, Vector3 pos) {
+	void shootChar(int id, Vector3 pos) {
 		if (Time.time - lastShotTime < 0.255f) {
 			//return;
 		}
 		Rigidbody blockClone;
 
-		if (id == " ") {
+		if (id == 26) {
 			blockClone = (Rigidbody)(Instantiate (spaceBlock, pos, topRow.transform.rotation));
 		} else {
 			blockClone = (Rigidbody)(Instantiate (charBlock, pos, topRow.transform.rotation));
@@ -193,15 +210,16 @@ public class SpawnerScript : MonoBehaviour {
 
 
 		//GameObject blockCloneGO = (GameObject)(blockClone);
-		Color ech = computeColor (lastPos.x);
+		//Color ech = computeColor (lastPos.x);
 
 
 
-		blockClone.GetComponent<Renderer> ().materials [0].color = ech;
+		//blockClone.GetComponent<Renderer> ().materials [0].color = ech;
+		blockClone.GetComponent<Renderer> ().materials [0].mainTexture = textures[id];
 
 		blockClone.angularVelocity = new Vector3 (Random.value * 5f - 2.5f, Random.value * 5f - 2.5f, Random.value * 5f - 2.5f);
-		blockClone.velocity = new Vector3 (0f, 0f, speed);//Vector3.forward * speed;
-
+		//blockClone.velocity = transform.forward.normalized * speed;//Vector3.forward * speed;
+		blockClone.velocity = (Vector3.zero - pos).normalized * speed;
 		//blockClone.velocity = new Vector3 (0f, speed, 0f);
 		lastShotTime = Time.time;
 
