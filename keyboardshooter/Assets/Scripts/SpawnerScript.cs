@@ -12,27 +12,27 @@ public class SpawnerScript : MonoBehaviour {
 	public GameObject midRow;
 	public GameObject botRow;
 
-	private Vector3 topLeft;
-	private float topSpan;
+	public Vector3 topLeft;
+	public float topSpan;
 
-	private Vector3 midLeft;
-	private float midSpan;
+	public Vector3 midLeft;
+	public float midSpan;
 
-	private Vector3 botLeft;
-	private float botSpan;
+	public Vector3 botLeft;
+	public float botSpan;
 
-	private float lastShotTime;
+	public float lastShotTime;
 
-	private float topCount = 9f;
-	private float midCount = 8f;
-	private float botCount = 6f;
+	public float topCount = 9f;
+	public float midCount = 8f;
+	public float botCount = 6f;
 
-	private float speed = 50f;	
+	public float speed = 50f;	
 
-	private AudioSource tone;
-	private float octaves = 1f;
+	public AudioSource tone;
+	public float octaves = 1f;
 
-	private Vector3 lastPos;
+	public Vector3 lastPos;
 
 	private float cBound0;
 	private float cBound1;
@@ -51,6 +51,13 @@ public class SpawnerScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		topCount = 9f;
+		midCount = 8f;
+		botCount = 6f;
+
+		speed = 50f;
+		octaves = 1f;
+
 		topLeft = topRow.transform.position - topRow.transform.lossyScale.x * topRow.transform.right * 1f/2f;
 		topSpan = Vector3.Distance (topLeft, topLeft + topRow.transform.lossyScale.x * topRow.transform.right);
 
@@ -74,115 +81,115 @@ public class SpawnerScript : MonoBehaviour {
 
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-		if (Input.GetKeyDown (KeyCode.Q)) {
-			myPerformance.sendKeyPress (0, topLeft);
-		}
-		if (Input.GetKeyDown (KeyCode.W)) {
-			myPerformance.sendKeyPress (1, topLeft + (topSpan * transform.right * 1f / topCount));
-		}
-		if (Input.GetKeyDown (KeyCode.E)) {
-			myPerformance.sendKeyPress (2, topLeft + (topSpan * transform.right * 2f / topCount));
-		}
-		if (Input.GetKeyDown (KeyCode.R)) {
-			myPerformance.sendKeyPress (3, topLeft + (topSpan * transform.right * 3f / topCount));
-		}
-		if (Input.GetKeyDown (KeyCode.T)) {
-			myPerformance.sendKeyPress (4, topLeft + (topSpan * transform.right * 4f / topCount));
-		}
-		if (Input.GetKeyDown (KeyCode.Y)) {
-			myPerformance.sendKeyPress (5, topLeft + (topSpan * transform.right * 5f / topCount));
-		}
-		if (Input.GetKeyDown (KeyCode.U)) {
-			myPerformance.sendKeyPress (6, topLeft + (topSpan * transform.right * 6f / topCount));
-		}
-		if (Input.GetKeyDown (KeyCode.I)) {
-			myPerformance.sendKeyPress (7, topLeft + (topSpan * transform.right * 7f / topCount));
-		}
-		if (Input.GetKeyDown (KeyCode.O)) {
-			myPerformance.sendKeyPress (8, topLeft + (topSpan * transform.right * 8f / topCount));
-		}
-		if (Input.GetKeyDown (KeyCode.P)) {
-			myPerformance.sendKeyPress (9, topLeft + (topSpan * transform.right * 9f / topCount));
-		}
-
-
-		if (Input.GetKeyDown (KeyCode.A)) {
-			myPerformance.sendKeyPress (10, midLeft);
-		}
-		if (Input.GetKeyDown (KeyCode.S)) {
-			myPerformance.sendKeyPress (11, midLeft + (midSpan * transform.right * 1f / midCount));
-		}
-		if (Input.GetKeyDown (KeyCode.D)) {
-			myPerformance.sendKeyPress (12, midLeft + (midSpan * transform.right * 2f / midCount));
-		}
-		if (Input.GetKeyDown (KeyCode.F)) {
-			myPerformance.sendKeyPress (13, midLeft + (midSpan * transform.right * 3f / midCount));
-		}
-		if (Input.GetKeyDown (KeyCode.G)) {
-			myPerformance.sendKeyPress (14, midLeft + (midSpan * transform.right * 4f / midCount));
-		}
-		if (Input.GetKeyDown (KeyCode.H)) {
-			myPerformance.sendKeyPress (15, midLeft + (midSpan * transform.right * 5f / midCount));
-		}
-		if (Input.GetKeyDown (KeyCode.J)) {
-			myPerformance.sendKeyPress (16, midLeft + (midSpan * transform.right * 6f / midCount));
-		}
-		if (Input.GetKeyDown (KeyCode.K)) {
-			myPerformance.sendKeyPress (17, midLeft + (midSpan * transform.right * 7f / midCount));
-		}
-		if (Input.GetKeyDown (KeyCode.L)) {
-			myPerformance.sendKeyPress (18, midLeft + (midSpan * transform.right * 8f / midCount));
-		}
-
-
-
-
-		if (Input.GetKeyDown (KeyCode.Z)) {
-			myPerformance.sendKeyPress (19, botLeft);
-		}
-		if (Input.GetKeyDown (KeyCode.X)) {
-			myPerformance.sendKeyPress (20, botLeft + (botSpan * transform.right * 1f / botCount));
-		}
-		if (Input.GetKeyDown (KeyCode.C)) {
-			myPerformance.sendKeyPress (21, botLeft + (botSpan * transform.right * 2f / botCount));
-		}
-		if (Input.GetKeyDown (KeyCode.V)) {
-			myPerformance.sendKeyPress (22, botLeft + (botSpan * transform.right * 3f / botCount));
-		}
-		if (Input.GetKeyDown (KeyCode.B)) {
-			myPerformance.sendKeyPress (23, botLeft + (botSpan * transform.right * 4f / botCount));
-		}
-		if (Input.GetKeyDown (KeyCode.N)) {
-			myPerformance.sendKeyPress (24, botLeft + (botSpan * transform.right * 5f / botCount));
-		}
-		if (Input.GetKeyDown (KeyCode.M)) {
-			myPerformance.sendKeyPress (25, botLeft + (botSpan * transform.right * 6f / botCount));
-		}
-
-		if (Input.GetKeyDown (KeyCode.Space)) {
-			myPerformance.sendKeyPress (26, botLeft + (botSpan * transform.right * 1f / 2f) + Vector3.back * 5f + Vector3.down * 5f);
-		}
-
-		if (Input.GetKeyDown (KeyCode.Escape)) {
-			Application.Quit ();
-		}
-
-		if (Input.GetKeyDown (KeyCode.Return)) {
-			//SpeechSynthesizer sp = new 
-			//Requester.getMp3 ("http://translate.google.com/translate_tts?tl=en&q=hello&ie=UTF-8&total=1&idx=0&client=t");
-			//Requester.getMp3 ("http://translate.google.com/translate_tts?tl=en&q=Hello%20World&client=t");
-			//Requester.getMp3 ();
-//			Application.OpenURL("http://translate.google.com/translate_tts?ie=UTF-8&q=Hello&tl=en&client=t");
-//			Application.OpenURL("https://www.google.com/?gws_rd=ssl");
-		}
-
-		if (Input.GetKeyDown (KeyCode.Escape)) {
-			Application.Quit();
-		}
-	}
+//	 Update is called once per frame
+//	void Update () {
+//	
+//		if (Input.GetKeyDown (KeyCode.Q)) {
+//			myPerformance.sendKeyPress (0, topLeft);
+//		}
+//		if (Input.GetKeyDown (KeyCode.W)) {
+//			myPerformance.sendKeyPress (1, topLeft + (topSpan * transform.right * 1f / topCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.E)) {
+//			myPerformance.sendKeyPress (2, topLeft + (topSpan * transform.right * 2f / topCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.R)) {
+//			myPerformance.sendKeyPress (3, topLeft + (topSpan * transform.right * 3f / topCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.T)) {
+//			myPerformance.sendKeyPress (4, topLeft + (topSpan * transform.right * 4f / topCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.Y)) {
+//			myPerformance.sendKeyPress (5, topLeft + (topSpan * transform.right * 5f / topCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.U)) {
+//			myPerformance.sendKeyPress (6, topLeft + (topSpan * transform.right * 6f / topCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.I)) {
+//			myPerformance.sendKeyPress (7, topLeft + (topSpan * transform.right * 7f / topCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.O)) {
+//			myPerformance.sendKeyPress (8, topLeft + (topSpan * transform.right * 8f / topCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.P)) {
+//			myPerformance.sendKeyPress (9, topLeft + (topSpan * transform.right * 9f / topCount));
+//		}
+//
+//
+//		if (Input.GetKeyDown (KeyCode.A)) {
+//			myPerformance.sendKeyPress (10, midLeft);
+//		}
+//		if (Input.GetKeyDown (KeyCode.S)) {
+//			myPerformance.sendKeyPress (11, midLeft + (midSpan * transform.right * 1f / midCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.D)) {
+//			myPerformance.sendKeyPress (12, midLeft + (midSpan * transform.right * 2f / midCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.F)) {
+//			myPerformance.sendKeyPress (13, midLeft + (midSpan * transform.right * 3f / midCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.G)) {
+//			myPerformance.sendKeyPress (14, midLeft + (midSpan * transform.right * 4f / midCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.H)) {
+//			myPerformance.sendKeyPress (15, midLeft + (midSpan * transform.right * 5f / midCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.J)) {
+//			myPerformance.sendKeyPress (16, midLeft + (midSpan * transform.right * 6f / midCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.K)) {
+//			myPerformance.sendKeyPress (17, midLeft + (midSpan * transform.right * 7f / midCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.L)) {
+//			myPerformance.sendKeyPress (18, midLeft + (midSpan * transform.right * 8f / midCount));
+//		}
+//
+//
+//
+//
+//		if (Input.GetKeyDown (KeyCode.Z)) {
+//			myPerformance.sendKeyPress (19, botLeft);
+//		}
+//		if (Input.GetKeyDown (KeyCode.X)) {
+//			myPerformance.sendKeyPress (20, botLeft + (botSpan * transform.right * 1f / botCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.C)) {
+//			myPerformance.sendKeyPress (21, botLeft + (botSpan * transform.right * 2f / botCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.V)) {
+//			myPerformance.sendKeyPress (22, botLeft + (botSpan * transform.right * 3f / botCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.B)) {
+//			myPerformance.sendKeyPress (23, botLeft + (botSpan * transform.right * 4f / botCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.N)) {
+//			myPerformance.sendKeyPress (24, botLeft + (botSpan * transform.right * 5f / botCount));
+//		}
+//		if (Input.GetKeyDown (KeyCode.M)) {
+//			myPerformance.sendKeyPress (25, botLeft + (botSpan * transform.right * 6f / botCount));
+//		}
+//
+//		if (Input.GetKeyDown (KeyCode.Space)) {
+//			myPerformance.sendKeyPress (26, botLeft + (botSpan * transform.right * 1f / 2f) + Vector3.back * 5f + Vector3.down * 5f);
+//		}
+//
+//		if (Input.GetKeyDown (KeyCode.Escape)) {
+//			Application.Quit ();
+//		}
+//
+//		if (Input.GetKeyDown (KeyCode.Return)) {
+//			//SpeechSynthesizer sp = new 
+//			//Requester.getMp3 ("http://translate.google.com/translate_tts?tl=en&q=hello&ie=UTF-8&total=1&idx=0&client=t");
+//			//Requester.getMp3 ("http://translate.google.com/translate_tts?tl=en&q=Hello%20World&client=t");
+//			//Requester.getMp3 ();
+////			Application.OpenURL("http://translate.google.com/translate_tts?ie=UTF-8&q=Hello&tl=en&client=t");
+////			Application.OpenURL("https://www.google.com/?gws_rd=ssl");
+//		}
+//
+//		if (Input.GetKeyDown (KeyCode.Escape)) {
+//			Application.Quit();
+//		}
+//	}
 
 	public void shootChar(int id, Vector3 pos) {
 		if (Time.time - lastShotTime < 0.255f) {
@@ -227,7 +234,7 @@ public class SpawnerScript : MonoBehaviour {
 		blockClone.velocity = (Vector3.zero - pos).normalized * speed;
 		//blockClone.velocity = new Vector3 (0f, speed, 0f);
 		lastShotTime = Time.time;
-
+		
 	}
 
 	Color computeColor (float xVal) {
