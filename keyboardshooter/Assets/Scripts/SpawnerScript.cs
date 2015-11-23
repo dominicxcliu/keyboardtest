@@ -27,7 +27,7 @@ public class SpawnerScript : MonoBehaviour {
 	public float midCount = 8f;
 	public float botCount = 6f;
 
-	public float speed = 50f;	
+	public float speed;	
 
 	public AudioSource tone;
 	public float octaves = 1f;
@@ -49,13 +49,17 @@ public class SpawnerScript : MonoBehaviour {
 	public GameObject myNetworkThingy;
 	private Performance myPerformance;
 
+//	public GameObject stickyLine;
+//	private Vector3 stickyStart;
+//	private Vector3 nextPos;
+
 	// Use this for initialization
 	void Start () {
 		topCount = 9f;
 		midCount = 8f;
 		botCount = 6f;
 
-		speed = 50f;
+		speed = 80f;
 		octaves = 1f;
 
 		topLeft = topRow.transform.position - topRow.transform.lossyScale.x * topRow.transform.right * 1f/2f;
@@ -78,6 +82,9 @@ public class SpawnerScript : MonoBehaviour {
 
 		tone = GetComponent<AudioSource> ();
 		myPerformance = myNetworkThingy.GetComponent<Performance> ();
+
+//		stickyStart = stickyLine.transform.position - stickyLine.transform.lossyScale.x * stickyLine.transform.right * 1f / 2f;
+//		nextPos = stickyStart;
 
 	}
 	
@@ -222,16 +229,16 @@ public class SpawnerScript : MonoBehaviour {
 
 
 		//GameObject blockCloneGO = (GameObject)(blockClone);
-		//Color ech = computeColor (lastPos.x);
+		Color ech = computeColor (lastPos.x);
 
 
-
-		//blockClone.GetComponent<Renderer> ().materials [0].color = ech;
+		blockClone.GetComponent<Renderer> ().materials [0].color = ech;
 		blockClone.GetComponent<Renderer> ().materials [0].mainTexture = textures[id];
 
 		blockClone.angularVelocity = new Vector3 (Random.value * 5f - 2.5f, Random.value * 5f - 2.5f, Random.value * 5f - 2.5f);
 		//blockClone.velocity = transform.forward.normalized * speed;//Vector3.forward * speed;
 		blockClone.velocity = (Vector3.zero - pos).normalized * speed;
+//		nextPos = nextPos + 10f * stickyLine.transform.right;
 		//blockClone.velocity = new Vector3 (0f, speed, 0f);
 		lastShotTime = Time.time;
 		

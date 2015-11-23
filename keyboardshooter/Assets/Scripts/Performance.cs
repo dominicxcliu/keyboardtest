@@ -56,14 +56,13 @@ public class Performance : NetworkManager {
 
 	private Vector2 chatScrollPosition = Vector2.zero;
 	private Vector2 userScrollPosition = Vector2.zero;
-
-
+	
 
 	// Use this for initialization
 	void Start () {
-		roundWaitTime = 10f;
+		roundWaitTime = 3f;
 		amountWaited = 0f;
-		initCountdown = 14f; //each round lasts 7 rounds
+		initCountdown = 7f; //each round lasts 7 rounds
 		countDown = initCountdown;
 		round = 0;
 		story = new StreamReader (inputStoryPath);
@@ -266,114 +265,110 @@ public class Performance : NetworkManager {
 
 	private void OnGUI(){
 
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Q) {
-			this.sendKeyPress (0, mySpawner.topLeft);
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.W) {
-			this.sendKeyPress (1, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 1f / mySpawner.topCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.E) {
-			this.sendKeyPress (2, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 2f / mySpawner.topCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.R) {
-			this.sendKeyPress (3, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 3f / mySpawner.topCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.T) {
-			this.sendKeyPress (4, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 4f / mySpawner.topCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Y) {
-			this.sendKeyPress (5, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 5f / mySpawner.topCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.U) {
-			this.sendKeyPress (6, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 6f / mySpawner.topCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.I) {
-			this.sendKeyPress (7, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 7f / mySpawner.topCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.O) {
-			this.sendKeyPress (8, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 8f / mySpawner.topCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.P) {
-			this.sendKeyPress (9, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 9f / mySpawner.topCount));
-		}
+		if (!lockedForRound && GUI.GetNameOfFocusedControl() == "text") {
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Q) {
+				this.sendKeyPress (0, mySpawner.topLeft);
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.W) {
+				this.sendKeyPress (1, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 1f / mySpawner.topCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.E) {
+				this.sendKeyPress (2, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 2f / mySpawner.topCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.R) {
+				this.sendKeyPress (3, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 3f / mySpawner.topCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.T) {
+				this.sendKeyPress (4, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 4f / mySpawner.topCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Y) {
+				this.sendKeyPress (5, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 5f / mySpawner.topCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.U) {
+				this.sendKeyPress (6, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 6f / mySpawner.topCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.I) {
+				this.sendKeyPress (7, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 7f / mySpawner.topCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.O) {
+				this.sendKeyPress (8, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 8f / mySpawner.topCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.P) {
+				this.sendKeyPress (9, mySpawner.topLeft + (mySpawner.topSpan * transform.right * 9f / mySpawner.topCount));
+			}
+		
+
+			else if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.A) {
+				this.sendKeyPress (10, mySpawner.midLeft);
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.S) {
+				this.sendKeyPress (11, mySpawner.midLeft + (mySpawner.midSpan * transform.right * 1f / mySpawner.midCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.D) {
+				this.sendKeyPress (12, mySpawner.midLeft + (mySpawner.midSpan * transform.right * 2f / mySpawner.midCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.F) {
+				this.sendKeyPress (13, mySpawner.midLeft + (mySpawner.midSpan * transform.right * 3f / mySpawner.midCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.G) {
+				this.sendKeyPress (14, mySpawner.midLeft + (mySpawner.midSpan * transform.right * 4f / mySpawner.midCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.H) {
+				this.sendKeyPress (15, mySpawner.midLeft + (mySpawner.midSpan * transform.right * 5f / mySpawner.midCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.J) {
+				this.sendKeyPress (16, mySpawner.midLeft + (mySpawner.midSpan * transform.right * 6f / mySpawner.midCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.K) {
+				this.sendKeyPress (17, mySpawner.midLeft + (mySpawner.midSpan * transform.right * 7f / mySpawner.midCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.L) {
+				this.sendKeyPress (18, mySpawner.midLeft + (mySpawner.midSpan * transform.right * 8f / mySpawner.midCount));
+			}
 		
 		
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.A) {
-			this.sendKeyPress (10, mySpawner.midLeft);
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.S) {
-			this.sendKeyPress (11, mySpawner.midLeft + (mySpawner.midSpan * transform.right * 1f / mySpawner.midCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.D) {
-			this.sendKeyPress (12, mySpawner.midLeft + (mySpawner.midSpan * transform.right * 2f / mySpawner.midCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.F) {
-			this.sendKeyPress (13, mySpawner.midLeft + (mySpawner.midSpan * transform.right * 3f / mySpawner.midCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.G) {
-			this.sendKeyPress (14, mySpawner.midLeft + (mySpawner.midSpan * transform.right * 4f / mySpawner.midCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.H) {
-			this.sendKeyPress (15, mySpawner.midLeft + (mySpawner.midSpan * transform.right * 5f / mySpawner.midCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.J) {
-			this.sendKeyPress (16, mySpawner.midLeft + (mySpawner.midSpan * transform.right * 6f / mySpawner.midCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.K) {
-			this.sendKeyPress (17, mySpawner.midLeft + (mySpawner.midSpan * transform.right * 7f / mySpawner.midCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.L) {
-			this.sendKeyPress (18, mySpawner.midLeft + (mySpawner.midSpan * transform.right * 8f / mySpawner.midCount));
-		}
 		
 		
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Z) {
+				this.sendKeyPress (19, mySpawner.botLeft);
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.X) {
+				this.sendKeyPress (20, mySpawner.botLeft + (mySpawner.botSpan * transform.right * 1f / mySpawner.botCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.C) {
+				this.sendKeyPress (21, mySpawner.botLeft + (mySpawner.botSpan * transform.right * 2f / mySpawner.botCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.V) {
+				this.sendKeyPress (22, mySpawner.botLeft + (mySpawner.botSpan * transform.right * 3f / mySpawner.botCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.B) {
+				this.sendKeyPress (23, mySpawner.botLeft + (mySpawner.botSpan * transform.right * 4f / mySpawner.botCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.N) {
+				this.sendKeyPress (24, mySpawner.botLeft + (mySpawner.botSpan * transform.right * 5f / mySpawner.botCount));
+			}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.M) {
+				this.sendKeyPress (25, mySpawner.botLeft + (mySpawner.botSpan * transform.right * 6f / mySpawner.botCount));
+			}
 		
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Space) {
+				this.sendKeyPress (26, mySpawner.botLeft + (mySpawner.botSpan * transform.right * 1f / 2f) + Vector3.back * 5f + Vector3.down * 5f);
+			}
 		
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Z) {
-			this.sendKeyPress (19, mySpawner.botLeft);
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.X) {
-			this.sendKeyPress (20, mySpawner.botLeft + (mySpawner.botSpan * transform.right * 1f / mySpawner.botCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.C) {
-			this.sendKeyPress (21, mySpawner.botLeft + (mySpawner.botSpan * transform.right * 2f / mySpawner.botCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.V) {
-			this.sendKeyPress (22, mySpawner.botLeft + (mySpawner.botSpan * transform.right * 3f / mySpawner.botCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.B) {
-			this.sendKeyPress (23, mySpawner.botLeft + (mySpawner.botSpan * transform.right * 4f / mySpawner.botCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.N) {
-			this.sendKeyPress (24, mySpawner.botLeft + (mySpawner.botSpan * transform.right * 5f / mySpawner.botCount));
-		}
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.M) {
-			this.sendKeyPress (25, mySpawner.botLeft + (mySpawner.botSpan * transform.right * 6f / mySpawner.botCount));
-		}
+			if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Return) {
+				//SpeechSynthesizer sp = new 
+				//Requester.getMp3 ("http://translate.google.com/translate_tts?tl=en&q=hello&ie=UTF-8&total=1&idx=0&client=t");
+				//Requester.getMp3 ("http://translate.google.com/translate_tts?tl=en&q=Hello%20World&client=t");
+				//Requester.getMp3 ();
+				//			Application.OpenURL("http://translate.google.com/translate_tts?ie=UTF-8&q=Hello&tl=en&client=t");
+				//			Application.OpenURL("https://www.google.com/?gws_rd=ssl");
+			}
 		
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Space) {
-			this.sendKeyPress (26, mySpawner.botLeft + (mySpawner.botSpan * transform.right * 1f / 2f) + Vector3.back * 5f + Vector3.down * 5f);
+
 		}
-		
 		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Escape) {
 			Application.Quit ();
 		}
-		
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Return) {
-			//SpeechSynthesizer sp = new 
-			//Requester.getMp3 ("http://translate.google.com/translate_tts?tl=en&q=hello&ie=UTF-8&total=1&idx=0&client=t");
-			//Requester.getMp3 ("http://translate.google.com/translate_tts?tl=en&q=Hello%20World&client=t");
-			//Requester.getMp3 ();
-			//			Application.OpenURL("http://translate.google.com/translate_tts?ie=UTF-8&q=Hello&tl=en&client=t");
-			//			Application.OpenURL("https://www.google.com/?gws_rd=ssl");
-		}
-		
-		if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Escape) {
-			Application.Quit();
-		}
-
-
-
 
 
 		if (!connected) {
@@ -462,9 +457,28 @@ public class Performance : NetworkManager {
 	void displayStuff(){
 		if (round < numRounds) {
 			//chat display
-			GUILayout.BeginVertical (GUILayout.Width (400));
+			GUILayout.BeginHorizontal (GUILayout.Width (Screen.width));
 			{
-				GUILayout.BeginHorizontal (GUILayout.Height (250));
+				//left section of screen
+				GUILayout.BeginHorizontal (GUILayout.Width (Screen.width/3));
+				{
+					GUI.SetNextControlName ("text");
+					currentMessage = GUILayout.TextField (currentMessage, GUILayout.Width(200));
+					
+					if(Event.current.isKey) {
+						switch (Event.current.keyCode) {
+						case KeyCode.Return:
+							if (!lockedForRound){
+								sendMessage();
+							}
+							break;
+						}
+					}
+				}
+				GUILayout.EndHorizontal ();
+
+				//middle section of screen
+				GUILayout.BeginHorizontal (GUILayout.Height (Screen.width/3));
 				{
 					chatScrollPosition = GUILayout.BeginScrollView (chatScrollPosition, GUILayout.Width (200));
 					foreach (MyMessages.ChatMessage c in chatHistory) {
@@ -477,32 +491,26 @@ public class Performance : NetworkManager {
 						
 					}
 					GUILayout.EndScrollView();
-					userScrollPosition = GUILayout.BeginScrollView (userScrollPosition);
-					GUILayout.Label ("Currently Connected: " + users.Count);
-					foreach (string u in users) {
-						GUILayout.Label (u);
-					}
-					GUILayout.EndScrollView();
+
 					
 				}
 				GUILayout.EndHorizontal ();
-				GUILayout.BeginHorizontal (GUILayout.Width (250));
+
+				//right section of screen
+				GUILayout.BeginHorizontal ();
 				{
-
-					currentMessage = GUILayout.TextField (currentMessage, GUILayout.Width(200));
-
-					if(Event.current.isKey) {
-						switch (Event.current.keyCode) {
-						case KeyCode.Return:
-							if (!lockedForRound){
-								sendMessage();
-							}
-							break;
-						}
+					GUILayout.BeginVertical (GUILayout.Height (Screen.height));
+					{
+						GUILayout.Label ("Currently Connected: " + users.Count);
+						GUILayout.Label ("Time Left: " + (int) countDown);
+						GUILayout.Label ("Time Til Next Round: " + (roundWaitTime - amountWaited));
 					}
+					GUILayout.EndVertical ();
 				}
 				GUILayout.EndHorizontal ();
+
 			}
+			GUILayout.EndHorizontal ();
 		} 
 		else {
 			if (!finished)
