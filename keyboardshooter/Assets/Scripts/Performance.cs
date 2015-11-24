@@ -56,6 +56,11 @@ public class Performance : NetworkManager {
 
 	private Vector2 chatScrollPosition = Vector2.zero;
 	private Vector2 userScrollPosition = Vector2.zero;
+	private float invalidTimer;
+	private string invalidText = "";
+	private bool started = false;
+	private float startCount = 5f;
+	private AudioSource enter;
 	
 
 	// Use this for initialization
@@ -84,6 +89,7 @@ public class Performance : NetworkManager {
 		msgStyle.normal.textColor = Color.white;
 		isHost = false;
 		idNum = 1;
+		enter = GetComponent <AudioSource> ();
 	}
 
 	//prefill the words and these are the 
@@ -194,14 +200,24 @@ public class Performance : NetworkManager {
 	//when a chat message reaches the client
 	private void OnClientChatMessage(NetworkMessage netMsg)
 	{
-		lockedForRound = true; //someone hit send so no more typing
+
+
 		var msg = netMsg.ReadMessage <MyMessages.ChatMessage>();
+		if (msg.message == "start" && !started) {
+			started = true;
+			return;
+		}
+		if (!started) {
+			return;
+		}
+		lockedForRound = true; //someone hit send so no more typing
 		//button.GetComponent<ToggleScript>().ToggleColor();
 		//userHistory.Add (msg.user);
 		chatHistory.Add ((MyMessages.ChatMessage)msg);
 		chatScrollPosition = (new Vector2 (0, 1000000));
 		//for each client, update the word array with this, restart round somehow
 		words [round] = msg.message;
+		enter.Play ();
 		round++;
 	}
 	
@@ -370,7 +386,6 @@ public class Performance : NetworkManager {
 			Application.Quit ();
 		}
 
-
 		if (!connected) {
 			
 			GUILayout.BeginVertical (GUILayout.Width (300));
@@ -384,7 +399,7 @@ public class Performance : NetworkManager {
 				GUILayout.BeginHorizontal ();
 				{
 					GUILayout.Label ("Port Number ", GUILayout.Width (100));
-					int.TryParse (GUILayout.TextField (portNumber.ToString()), out portNumber);
+					int.TryParse (GUILayout.TextField (portNumber.ToString ()), out portNumber);
 				}
 				GUILayout.EndHorizontal ();
 				GUILayout.BeginHorizontal ();
@@ -403,26 +418,44 @@ public class Performance : NetworkManager {
 			if (GUILayout.Button ("Connect")) {
 				this.networkAddress = connectionIP;
 				this.networkPort = portNumber;
-				this.StartClient();
+				this.StartClient ();
 			}
 			//if host button clicked
 			//a host is a server and a client at the same time
 			if (GUILayout.Button ("Host")) {
 				this.networkAddress = connectionIP;
 				this.networkPort = portNumber;
-				this.StartHost();
+				this.StartHost ();
 			}
-		} else {
-			displayStuff();
+		} else if (!started) {
+			displayStart ();
+			return;
+		} else if (started && startCount > 0) {
+			displayStartCount ();
+			return;
 		}
+		else if (!lockedForRound) {
+			displayStuff ();
+		} else {
+			displayLocked();
+		}
+		invalidText = "";
+		if (invalidTimer > 0) {
+			invalidText = "your word is invalid";
+			invalidTimer -= Time.deltaTime;
+		}
+
 	}
 
 	void Update(){
 		doTimerStuff();
+		if (started && startCount > 0) {
+			startCount -= Time.deltaTime;
+		}
 	}
 
 	void doTimerStuff(){
-		if (users.Count == 2) {
+		if (users.Count == 2 && started && startCount < 0) {
 			//check timer, if countDown is <= 0, send message with words[round]
 			if (!lockedForRound)
 				countDown -= Time.deltaTime;
@@ -453,18 +486,38 @@ public class Performance : NetworkManager {
 			}
 		}
 	}
-	
+
+	void displayStart () {
+		if (isHost) {
+			if(GUILayout.Button ("Start"))
+			{
+				currentMessage = "start";
+				sendMessage ();
+			}
+		}
+	}
+
+	void displayLocked() {
+		GUILayout.Label ("ROUND OVER");
+		GUILayout.Label ("Time Til Next Round: " + (int)(roundWaitTime - amountWaited));
+	}
+
+	void displayStartCount () {
+		GUILayout.Label ("STARTING IN: " + (int)startCount);
+	}
+
 	void displayStuff(){
+		GUI.FocusControl("text");
 		if (round < numRounds) {
 			//chat display
 			GUILayout.BeginHorizontal (GUILayout.Width (Screen.width));
 			{
 				//left section of screen
-				GUILayout.BeginHorizontal (GUILayout.Width (Screen.width/3));
+				GUILayout.BeginVertical (GUILayout.Width (Screen.width/3));
 				{
 					GUI.SetNextControlName ("text");
-					currentMessage = GUILayout.TextField (currentMessage, GUILayout.Width(200));
-					
+					currentMessage = GUILayout.TextField (currentMessage);
+					GUILayout.Label (invalidText);
 					if(Event.current.isKey) {
 						switch (Event.current.keyCode) {
 						case KeyCode.Return:
@@ -475,22 +528,23 @@ public class Performance : NetworkManager {
 						}
 					}
 				}
-				GUILayout.EndHorizontal ();
+				GUILayout.EndVertical ();
 
 				//middle section of screen
 				GUILayout.BeginHorizontal (GUILayout.Height (Screen.width/3));
 				{
-					chatScrollPosition = GUILayout.BeginScrollView (chatScrollPosition, GUILayout.Width (200));
-					foreach (MyMessages.ChatMessage c in chatHistory) {
-						GUILayout.BeginHorizontal ();
-						{
-							GUILayout.Label (c.user + ":", nameStyle, GUILayout.Width (50));
-							GUILayout.Label (c.message, msgStyle);
-						}
-						GUILayout.EndHorizontal ();
-						
-					}
-					GUILayout.EndScrollView();
+//					chatScrollPosition = GUILayout.BeginScrollView (chatScrollPosition, GUILayout.Width (200));
+//					foreach (MyMessages.ChatMessage c in chatHistory) {
+//						GUILayout.BeginHorizontal ();
+//						{
+//							GUILayout.Label (c.user + ":", nameStyle, GUILayout.Width (50));
+//							GUILayout.Label (c.message, msgStyle);
+//						}
+//						GUILayout.EndHorizontal ();
+//						
+//					}
+//					GUILayout.EndScrollView();
+					GUILayout.Label (descriptors[round]);
 
 					
 				}
@@ -503,7 +557,7 @@ public class Performance : NetworkManager {
 					{
 						GUILayout.Label ("Currently Connected: " + users.Count);
 						GUILayout.Label ("Time Left: " + (int) countDown);
-						GUILayout.Label ("Time Til Next Round: " + (roundWaitTime - amountWaited));
+
 					}
 					GUILayout.EndVertical ();
 				}
@@ -537,7 +591,7 @@ public class Performance : NetworkManager {
 			currentMessage = "";
 		} else {
 			//play invalid sound do some animation thing, show an x on both screens in the gui or something
-			Debug.Log ("not a valid word");
+			invalidTimer = 2f;
 		}
 	}
 

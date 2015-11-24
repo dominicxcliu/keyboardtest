@@ -27,6 +27,8 @@ public class MyMessages {
 		public Vector3 pos;
 	}
 
+
+
 //	public class UserListMessage : MessageBase {
 //		public List<string> users;
 //	}

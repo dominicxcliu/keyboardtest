@@ -235,7 +235,7 @@ public class SpawnerScript : MonoBehaviour {
 		blockClone.GetComponent<Renderer> ().materials [0].color = ech;
 		blockClone.GetComponent<Renderer> ().materials [0].mainTexture = textures[id];
 
-		blockClone.angularVelocity = new Vector3 (Random.value * 5f - 2.5f, Random.value * 5f - 2.5f, Random.value * 5f - 2.5f);
+//		blockClone.angularVelocity = new Vector3 (Random.value * 5f - 2.5f, Random.value * 5f - 2.5f, Random.value * 5f - 2.5f);
 		//blockClone.velocity = transform.forward.normalized * speed;//Vector3.forward * speed;
 		blockClone.velocity = (Vector3.zero - pos).normalized * speed;
 //		nextPos = nextPos + 10f * stickyLine.transform.right;
