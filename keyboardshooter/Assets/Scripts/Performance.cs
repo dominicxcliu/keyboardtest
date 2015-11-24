@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine.Networking;
 using UnityEngine.Networking.NetworkSystem;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 public class Performance : NetworkManager {
 
@@ -61,7 +62,8 @@ public class Performance : NetworkManager {
 	private bool started = false;
 	private float startCount = 5f;
 	private AudioSource enter;
-	
+
+	private string speechUrl;
 
 	// Use this for initialization
 	void Start () {
@@ -110,6 +112,8 @@ public class Performance : NetworkManager {
 		wordReader.Close ();
 		descriptorReader.Close ();
 		numRounds = Mathf.Min (words.Length, descriptors.Length);
+		numRounds = 13;
+		Debug.Log (numRounds);
 	}
 
 	//display the words that were chosen, write the words to the story, choose a background music
@@ -128,7 +132,19 @@ public class Performance : NetworkManager {
 		story.Close ();
 		File.WriteAllText (toWritePath, final);
 		Debug.Log ("finisehd");
-		Debug.Break ();
+		//Debug.Break ();
+		//Regex.Replace (final, @",", "%2C");
+		//Regex.Replace (final, @"\"" )
+//		final = final.Replace (",", "%2C");
+//		final = final.Replace ("\"", "%22");
+//
+//		speechUrl = "http://translate.google.com/translate_tts?ie=UTF-8&q=" + final + "&tl=en";
+		//Debug.Log (url);
+		//Application.OpenURL ("/Users/Dominic/Desktop/story.txt");
+		//Application.OpenURL(url);
+		//Application.OpenURL ("http://translate.google.com/translate_tts?ie=UTF-8&q=Hello&tl=en&client=t");
+		Application.OpenURL ("file:///Users/Dominic/Desktop/story.txt");
+		Application.Quit ();
 		return;
 	}
 
@@ -452,6 +468,11 @@ public class Performance : NetworkManager {
 		if (started && startCount > 0) {
 			startCount -= Time.deltaTime;
 		}
+		if (finished) {
+			if (Input.GetKeyDown (KeyCode.Return)) {
+				Application.OpenURL ("file:///Users/Dominic/Desktop/story.txt");
+			}
+		}
 	}
 
 	void doTimerStuff(){
@@ -466,10 +487,28 @@ public class Performance : NetworkManager {
 			//Debug.Log ("nextRound in: " + countDown);
 			if (countDown <= 0f) {
 				//no one supplied a word quick enough so host sends msg!
-				if (isHost) {
+				if(round != 12){
+					if (isHost) {
+						countDown = initCountdown;
+						Debug.Log ("TIMES UP");
+						currentMessage = words [round];
+						sendMessage ();
+					}
+				}
+				if(round == 12) {
 					countDown = initCountdown;
-					Debug.Log ("TIMES UP");
-					currentMessage = words [round];
+					string newMessage = Regex.Replace (currentMessage, @"[\p{P}\d]", "");
+
+					currentMessage = newMessage;
+					int numSpaces = 1;
+					for(int i = 19; i < currentMessage.Length; i += 20 + numSpaces) {
+						currentMessage = currentMessage.Insert (i, " ");
+						numSpaces++;
+					}
+					currentMessage.Trim ();
+					if(string.IsNullOrEmpty(currentMessage)) {
+						currentMessage = words[12];
+					}
 					sendMessage ();
 				}
 			}
@@ -488,22 +527,73 @@ public class Performance : NetworkManager {
 	}
 
 	void displayStart () {
-		if (isHost) {
-			if(GUILayout.Button ("Start"))
+
+		GUILayout.BeginHorizontal (GUILayout.Width (Screen.width));
+		{
+			//left
+			GUILayout.Label ("", GUILayout.Width (Screen.width/3));
+			
+			//middle
+			GUILayout.BeginVertical (GUILayout.Width (Screen.width/3));
 			{
-				currentMessage = "start";
-				sendMessage ();
+				GUILayout.Label ("", GUILayout.Height (Screen.height/3));
+				
+				if (isHost) {
+					if(GUILayout.Button ("Start", GUILayout.Width(Screen.width/3), GUILayout.Height(Screen.height/3)))
+					{
+						currentMessage = "start";
+						sendMessage ();
+					}
+				}
+				else {
+					GUILayout.Label ("Waiting to Start", GUILayout.Width(Screen.width/3), GUILayout.Height(Screen.height/3));
+				}
+				
 			}
+			GUILayout.EndVertical ();
 		}
+		GUILayout.EndHorizontal ();
 	}
 
 	void displayLocked() {
-		GUILayout.Label ("ROUND OVER");
-		GUILayout.Label ("Time Til Next Round: " + (int)(roundWaitTime - amountWaited));
+
+		GUILayout.BeginHorizontal (GUILayout.Width (Screen.width));
+		{
+			//left
+			GUILayout.Label ("", GUILayout.Width (Screen.width/3));
+			
+			//middle
+			GUILayout.BeginVertical (GUILayout.Width (Screen.width/3));
+			{
+				GUILayout.Label ("", GUILayout.Height (Screen.height/3));
+				
+				GUILayout.Label ("ROUND OVER");
+				GUILayout.Label ("Time Until Next Round: " + (int)(roundWaitTime - amountWaited + 1));
+				
+			}
+			GUILayout.EndVertical ();
+		}
+		GUILayout.EndHorizontal ();
 	}
 
 	void displayStartCount () {
-		GUILayout.Label ("STARTING IN: " + (int)startCount);
+
+		GUILayout.BeginHorizontal (GUILayout.Width (Screen.width));
+		{
+			//left
+			GUILayout.Label ("", GUILayout.Width (Screen.width/3));
+			
+			//middle
+			GUILayout.BeginVertical (GUILayout.Width (Screen.width/3));
+			{
+				GUILayout.Label ("", GUILayout.Height (Screen.height/3));
+				
+				GUILayout.Label ("STARTING IN: " + (int)(startCount + 1));
+				
+			}
+			GUILayout.EndVertical ();
+		}
+		GUILayout.EndHorizontal ();
 	}
 
 	void displayStuff(){
@@ -512,11 +602,16 @@ public class Performance : NetworkManager {
 			//chat display
 			GUILayout.BeginHorizontal (GUILayout.Width (Screen.width));
 			{
-				//left section of screen
+				//left
+				GUILayout.Label ("", GUILayout.Width (Screen.width/3));
+
+				//middle
 				GUILayout.BeginVertical (GUILayout.Width (Screen.width/3));
 				{
+					GUILayout.Label ("", GUILayout.Height (Screen.height/3));
+
 					GUI.SetNextControlName ("text");
-					currentMessage = GUILayout.TextField (currentMessage);
+					currentMessage = GUILayout.TextField (currentMessage, GUILayout.Width (Screen.width/3));
 					GUILayout.Label (invalidText);
 					if(Event.current.isKey) {
 						switch (Event.current.keyCode) {
@@ -527,41 +622,13 @@ public class Performance : NetworkManager {
 							break;
 						}
 					}
+
+					GUILayout.Label ("Description: " + descriptors[round]);
+					GUILayout.Label ("Time Left: " + (int) (countDown + 1f));
+
 				}
 				GUILayout.EndVertical ();
 
-				//middle section of screen
-				GUILayout.BeginHorizontal (GUILayout.Height (Screen.width/3));
-				{
-//					chatScrollPosition = GUILayout.BeginScrollView (chatScrollPosition, GUILayout.Width (200));
-//					foreach (MyMessages.ChatMessage c in chatHistory) {
-//						GUILayout.BeginHorizontal ();
-//						{
-//							GUILayout.Label (c.user + ":", nameStyle, GUILayout.Width (50));
-//							GUILayout.Label (c.message, msgStyle);
-//						}
-//						GUILayout.EndHorizontal ();
-//						
-//					}
-//					GUILayout.EndScrollView();
-					GUILayout.Label (descriptors[round]);
-
-					
-				}
-				GUILayout.EndHorizontal ();
-
-				//right section of screen
-				GUILayout.BeginHorizontal ();
-				{
-					GUILayout.BeginVertical (GUILayout.Height (Screen.height));
-					{
-						GUILayout.Label ("Currently Connected: " + users.Count);
-						GUILayout.Label ("Time Left: " + (int) countDown);
-
-					}
-					GUILayout.EndVertical ();
-				}
-				GUILayout.EndHorizontal ();
 
 			}
 			GUILayout.EndHorizontal ();
@@ -582,7 +649,8 @@ public class Performance : NetworkManager {
 			return;
 		currentMessage.Trim ();
 		currentMessage = currentMessage.ToLower ();
-		if (isValidWord (currentMessage)) {
+		Debug.Log ("CURRENTROUND: "+ round);
+		if (isValidWord (currentMessage) || round == 0 || round == 8 || round == 12) {
 			//play good sound or whatever to show someone got a word
 			MyMessages.ChatMessage msg = new MyMessages.ChatMessage ();
 			msg.user = userName;

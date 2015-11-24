@@ -59,7 +59,7 @@ public class SpawnerScript : MonoBehaviour {
 		midCount = 8f;
 		botCount = 6f;
 
-		speed = 80f;
+		speed = 30f;
 		octaves = 1f;
 
 		topLeft = topRow.transform.position - topRow.transform.lossyScale.x * topRow.transform.right * 1f/2f;
@@ -229,8 +229,22 @@ public class SpawnerScript : MonoBehaviour {
 
 
 		//GameObject blockCloneGO = (GameObject)(blockClone);
-		Color ech = computeColor (lastPos.x);
+		//Color ech = computeColor (lastPos.x);
+		Color ech;
 
+		float ra = Random.value * 6;
+		if (0f <= ra && ra < 1f)
+			ech = Color.red;
+		else if (1f <= ra && ra < 2f)
+			ech = new Color(1f, 0.65f, 0f);
+		else if (2f <= ra && ra < 3f)
+			ech = Color.yellow;
+		else if (3f <= ra && ra < 4f)
+			ech = Color.green;
+		else if (4f <= ra && ra < 5f)
+			ech = Color.blue;
+		else
+			ech = new Color(1f, 0f, 1f);
 
 		blockClone.GetComponent<Renderer> ().materials [0].color = ech;
 		blockClone.GetComponent<Renderer> ().materials [0].mainTexture = textures[id];

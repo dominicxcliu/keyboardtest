@@ -20,7 +20,7 @@ public class BlockBehavior : MonoBehaviour {
 //			GetComponent<Collider> ().tag = "Background";
 //			FixedJoint joint = this.gameObject.AddComponent <FixedJoint> ();
 //			joint.connectedBody = collision.rigidbody;
-			GetComponent<Rigidbody> ().useGravity = true;
+//			GetComponent<Rigidbody> ().useGravity = true;
 		}
 	}
 
